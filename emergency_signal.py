@@ -1,5 +1,6 @@
 import time
 import random
+import uuid
 
 class Drone:
     def __init__(self, drone_id):
@@ -18,19 +19,25 @@ class Drone:
         print(f"Drone {self.drone_id}: Data transmitted successfully.")
         print("Data:", data)
 
+def generate_sample_data(drone_id):
+    return {
+        "drone_id": drone_id,
+        "latitude": round(random.uniform(12.0, 13.0), 6),
+        "longitude": round(random.uniform(77.0, 78.0), 6),
+        "altitude": round(random.uniform(50, 100), 2),
+        "emergency_type": random.choice(["Medical Emergency", "Fire Emergency", "Natural Disaster"]),
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "uuid": str(uuid.uuid4())  # Adding a UUID for uniqueness
+    }
+
 def simulate_emergency(drone_id):
     drone = Drone(drone_id)
     drone.send_emergency_signal()
-    # Generate sample data to transmit
-    data = {
-        "latitude": random.uniform(12.0, 13.0),
-        "longitude": random.uniform(77.0, 78.0),
-        "altitude": random.uniform(50, 100),
-        "emergency_type": "Medical Emergency",
-        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
-    }
+    data = generate_sample_data(drone_id)
     drone.transmit_data(data)
 
 # Simulate emergency signals from multiple drones
-for i in range(5):
+NUM_DRONES = 5
+for i in range(NUM_DRONES):
     simulate_emergency(i+1)
+
