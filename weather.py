@@ -3,7 +3,7 @@ import requests
 class WeatherService:
     def __init__(self, api_key):
         self.api_key = api_key
-        self.base_url = 'http://api.openweathermap.org/data/2.5/weather'
+        self.base_url = 'https://api.openweathermap.org/data/2.5/weather'
 
     def get_weather(self, latitude, longitude):
         params = {
@@ -29,7 +29,7 @@ class WeatherService:
 
 def main():
     # Replace 'YOUR_API_KEY' with your actual OpenWeatherMap API key
-    api_key = 'YOUR_API_KEY'
+    api_key = '5bc55445217d47000757537c112fe465'
     latitude = 37.7749  # Example latitude (San Francisco)
     longitude = -122.4194  # Example longitude (San Francisco)
 
