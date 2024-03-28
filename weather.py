@@ -16,7 +16,10 @@ def get_weather(api_key, city):
                 'City': city,
                 'Temperature (°C)': data['main']['temp'],
                 'Humidity (%)': data['main']['humidity'],
-                'Description': data['weather'][0]['description']
+                'Description': data['weather'][0]['description'],
+                'Wind Speed (m/s)': data['wind']['speed'],
+                'Atmospheric Pressure (hPa)': data['main']['pressure'],
+                'Weather Condition ID': data['weather'][0]['id']
             }
             return weather_data
         else:
@@ -70,4 +73,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
