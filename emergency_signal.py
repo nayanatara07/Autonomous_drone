@@ -36,6 +36,18 @@ class Drone:
         print(f"Drone {self.drone_id}: Relief supplies delivered successfully.")
         print("Supplies:", supplies)
 
+    def transmit_data(self, data):
+        """
+        Simulate transmitting data to nearby transportation service apps.
+
+        Parameters:
+        - data (dict): The data to transmit.
+        """
+        print(f"Drone {self.drone_id}: Transmitting data to nearby transportation service apps...")
+        time.sleep(2)
+        print(f"Drone {self.drone_id}: Data transmitted successfully.")
+        print("Data:", data)
+
 def generate_relief_supplies(drone_id):
     """
     Generate relief supplies for the drone to deliver.
@@ -54,6 +66,28 @@ def generate_relief_supplies(drone_id):
         "uuid": str(uuid.uuid4())  # Adding a UUID for uniqueness
     }
 
+def generate_sample_data(drone_id):
+    """
+    Generate sample data for the drone.
+
+    Parameters:
+    - drone_id (int): The unique identifier of the drone.
+
+    Returns:
+    - dict: A dictionary containing sample data.
+    """
+    return {
+        "drone_id": drone_id,
+        "people_count": random.randint(1, 10),
+        "area_affected": f"Area-{drone_id}",
+        "latitude": round(random.uniform(12.0, 13.0), 6),
+        "longitude": round(random.uniform(77.0, 78.0), 6),
+        "altitude": round(random.uniform(50, 100), 2),
+        "emergency_type": random.choice(["Medical Emergency", "Fire Emergency", "Natural Disaster"]),
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "uuid": str(uuid.uuid4())  # Adding a UUID for uniqueness
+    }
+
 def simulate_emergency(drone_id):
     """
     Simulate an emergency scenario for the drone.
@@ -65,6 +99,8 @@ def simulate_emergency(drone_id):
     drone.send_emergency_signal()
     relief_supplies = generate_relief_supplies(drone_id)
     drone.deliver_relief_supplies(relief_supplies)
+    data = generate_sample_data(drone_id)
+    drone.transmit_data(data)
 
 def main():
     """
@@ -82,6 +118,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
