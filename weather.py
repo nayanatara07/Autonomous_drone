@@ -1,107 +1,76 @@
 import requests
-from tabulate import tabulate
 
-def get_weather(api_key, city):
-    base_url = 'https://api.openweathermap.org/data/2.5/weather'
-    params = {
-        'q': city,
-        'appid': api_key,
-        'units': 'metric'
-    }
-    try:
-        response = requests.get(base_url, params=params)
-        data = response.json()
-        if response.status_code == 200:
-            weather_data = {
-                'City': city,
-                'Temperature (°C)': data['main']['temp'],
-                'Humidity (%)': data['main']['humidity'],
-                'Description': data['weather'][0]['description'],
-                'Wind Speed (m/s)': data['wind']['speed'],
-                'Atmospheric Pressure (hPa)': data['main']['pressure'],
-                'Weather Condition ID': data['weather'][0]['id']
-            }
-            return weather_data
-        else:
-            print(f"Failed to fetch weather data for {city}: {data['message']}")
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
+class WeatherService:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = 'https://api.openweathermap.org/data/2.5/weather'
+
+    def get_weather(self, city):
+        params = {
+            'q': city,
+            'appid': self.api_key,
+            'units': 'metric'  # Use metric units for temperature (Celsius)
+        }
+        try:
+            response = requests.get(self.base_url, params=params)
+            data = response.json()
+            if response.status_code == 200:
+                return data
+            else:
+                print(f"Failed to fetch weather data for {city}: {data.get('message', 'Unknown error')}")
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
 
 def calculate_disaster_probability(weather_data):
-    # Example disaster probability calculation based on weather conditions
-    temp_score = 0
-    if weather_data['Temperature (°C)'] > 30:
-        temp_score += 2
-    if weather_data['Humidity (%)'] > 80:
-        temp_score += 1
-    if weather_data['Weather Condition ID'] in [200, 201, 202, 210, 211, 212, 221, 230, 231, 232]:
-        # Thunderstorm conditions
-        temp_score += 3
-    if weather_data['Weather Condition ID'] in [300, 301, 302, 310, 311, 312, 313, 314, 321]:
-        # Drizzle conditions
-        temp_score += 1
-    if weather_data['Weather Condition ID'] in [500, 501, 502, 503, 504, 511, 520, 521, 522, 531]:
-        # Rain conditions
-        temp_score += 2
-    if weather_data['Weather Condition ID'] in [600, 601, 602, 611, 612, 613, 615, 616, 620, 621, 622]:
-        # Snow conditions
-        temp_score += 2
-    if weather_data['Weather Condition ID'] in [701, 711, 721, 731, 741, 751, 761, 762, 771, 781]:
-        # Atmospheric conditions
-        temp_score += 1
-    if weather_data['Wind Speed (m/s)'] > 10:
-        temp_score += 2
-    if weather_data['Atmospheric Pressure (hPa)'] < 900 or weather_data['Atmospheric Pressure (hPa)'] > 1100:
-        temp_score += 2
-    
-    # Probability score ranges from 0 to 15 (Higher score indicates higher probability of a disaster)
-    probability_score = min(temp_score, 15)  # Limit maximum score to 15
-    return probability_score
+    temperature = weather_data.get('main', {}).get('temp', 0)
+    humidity = weather_data.get('main', {}).get('humidity', 0)
+    wind_speed = weather_data.get('wind', {}).get('speed', 0)
+    weather_description = weather_data.get('weather', [{}])[0].get('description', '').lower()
+
+    probability = 0
+
+    if 'thunderstorm' in weather_description or 'storm' in weather_description or 'tornado' in weather_description:
+        probability += 0.5
+    elif 'rain' in weather_description or 'drizzle' in weather_description:
+        probability += 0.3
+    elif 'snow' in weather_description or 'blizzard' in weather_description:
+        probability += 0.3
+
+    if temperature < 5 or temperature > 35:
+        probability += 0.3
+
+    if humidity > 80:
+        probability += 0.2
+
+    if wind_speed > 15:
+        probability += 0.2
+
+    probability = max(0, min(1, probability))
+
+    return probability
 
 def main():
     # Replace 'YOUR_API_KEY' with your actual OpenWeatherMap API key
     api_key = '5bc55445217d47000757537c112fe465'
+    cities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat",
+              "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Visakhapatnam", "Indore", "Thane", "Bhopal",
+              "Patna", "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad"]
 
-    # List of major cities in each state of India
-    cities = {
-        'Andhra Pradesh': 'Vijayawada',
-        'Arunachal Pradesh': 'Itanagar',
-        'Assam': 'Guwahati',
-        'Bihar': 'Patna',
-        'Chhattisgarh': 'Raipur',
-        'Goa': 'Panaji',
-        'Gujarat': 'Ahmedabad',
-        'Haryana': 'Chandigarh',
-        'Himachal Pradesh': 'Shimla',
-        'Jharkhand': 'Ranchi',
-        'Karnataka': 'Bangalore',
-        'Kerala': 'Thiruvananthapuram',
-        'Madhya Pradesh': 'Bhopal',
-        'Maharashtra': 'Mumbai',
-        'Manipur': 'Imphal',
-        'Meghalaya': 'Shillong',
-        'Mizoram': 'Aizawl',
-        'Nagaland': 'Kohima',
-        'Odisha': 'Bhubaneswar',
-        'Punjab': 'Chandigarh',
-        'Rajasthan': 'Jaipur',
-        'Sikkim': 'Gangtok',
-        'Tamil Nadu': 'Chennai',
-        'Telangana': 'Hyderabad',
-        'Tripura': 'Agartala',
-        'Uttar Pradesh': 'Lucknow',
-        'Uttarakhand': 'Dehradun',
-        'West Bengal': 'Kolkata'
-    }
+    weather_service = WeatherService(api_key)
+    disaster_probabilities = {}
 
-    weather_data = []
-    for state, city in cities.items():
-        data = get_weather(api_key, city)
-        if data:
-            data['Disaster Probability'] = calculate_disaster_probability(data)
-            weather_data.append(data)
+    for city in cities:
+        weather_data = weather_service.get_weather(city)
+        if weather_data:
+            disaster_probabilities[city] = calculate_disaster_probability(weather_data)
 
-    print(tabulate(weather_data, headers="keys", tablefmt="grid"))
+    print("Disaster Probabilities:")
+    print("| City       | Probability |")
+    print("|------------|-------------|")
+    for city, probability in disaster_probabilities.items():
+        print(f"| {city:<10} | {probability:.2f}        |")
 
 if __name__ == "__main__":
     main()
+
+
