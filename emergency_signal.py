@@ -76,10 +76,26 @@ def generate_sample_data(drone_id):
     Returns:
     - dict: A dictionary containing sample data.
     """
+    states = ["Maharashtra", "Uttar Pradesh", "West Bengal", "Rajasthan", "Madhya Pradesh", "Tamil Nadu", "Karnataka", "Gujarat", "Andhra Pradesh", "Odisha"]
+    districts = {
+        "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
+        "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Allahabad"],
+        "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri"],
+        "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Bikaner", "Ajmer"],
+        "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Gwalior", "Ujjain"],
+        "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+        "Karnataka": ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belgaum"],
+        "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
+        "Andhra Pradesh": ["Hyderabad", "Visakhapatnam", "Vijayawada", "Guntur", "Nellore"],
+        "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur"]
+    }
+    state = random.choice(states)
+    district = random.choice(districts[state])
+
     return {
         "drone_id": drone_id,
         "people_count": random.randint(1, 10),
-        "area_affected": f"Area-{drone_id}",
+        "area_affected": f"{district}, {state}, India",
         "latitude": round(random.uniform(12.0, 13.0), 6),
         "longitude": round(random.uniform(77.0, 78.0), 6),
         "altitude": round(random.uniform(50, 100), 2),
