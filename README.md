@@ -18,6 +18,10 @@ This script utilizes computer vision to detect the number of people in disaster-
 
 This module implements an autonomous drone capable of executing various tasks. It connects to the drone using the DroneKit library, arms and takes off, scans disaster areas, detects humans using computer vision algorithms, and delivers food packets to identified locations.
 
+### 4. weather.py
+
+This script collects current weather conditions for various cities in India and calculates the probability of having a disaster based on the weather data. It provides valuable information for disaster management operations.
+
 ## Usage
 
 To use this project:
@@ -26,15 +30,13 @@ To use this project:
 2. Run the `emergency_signal.py` script to activate drone groups and simulate emergency signals and relief supply deliveries.
 3. Execute the `main.py` script to detect the number of people in disaster-affected areas using computer vision.
 4. Utilize the `drone.py` module to deploy autonomous drones for disaster management operations.
+5. Run the `weather.py` script to collect weather conditions and assess the probability of disasters in different cities.
 
 ## Contributors
 
-- [Your Name]
-- [Your Team Members]
+- [NayanaTara]
+- [Team_mates:Amruth,Lohit,Shiva]
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgements
 
