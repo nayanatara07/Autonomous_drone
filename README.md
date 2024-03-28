@@ -1,4 +1,4 @@
-# Disaster Management using Drones
+# Disaster Rescue using Drones
 
 ## Introduction
 
