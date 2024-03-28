@@ -24,34 +24,32 @@ class Drone:
         time.sleep(1)
         print(f"Drone {self.drone_id}: Emergency signal sent.")
 
-    def transmit_data(self, data):
+    def deliver_relief_supplies(self, supplies):
         """
-        Simulate transmitting data to nearby transportation service apps.
+        Simulate delivering relief supplies to affected areas.
 
         Parameters:
-        - data (dict): The data to transmit.
+        - supplies (dict): The relief supplies to deliver.
         """
-        print(f"Drone {self.drone_id}: Transmitting data to nearby transportation service apps...")
+        print(f"Drone {self.drone_id}: Delivering relief supplies to affected areas...")
         time.sleep(2)
-        print(f"Drone {self.drone_id}: Data transmitted successfully.")
-        print("Data:", data)
+        print(f"Drone {self.drone_id}: Relief supplies delivered successfully.")
+        print("Supplies:", supplies)
 
-def generate_sample_data(drone_id):
+def generate_relief_supplies(drone_id):
     """
-    Generate sample data for the drone.
+    Generate relief supplies for the drone to deliver.
 
     Parameters:
     - drone_id (int): The unique identifier of the drone.
 
     Returns:
-    - dict: A dictionary containing sample data.
+    - dict: A dictionary containing relief supplies.
     """
     return {
         "drone_id": drone_id,
-        "latitude": round(random.uniform(12.0, 13.0), 6),
-        "longitude": round(random.uniform(77.0, 78.0), 6),
-        "altitude": round(random.uniform(50, 100), 2),
-        "emergency_type": random.choice(["Medical Emergency", "Fire Emergency", "Natural Disaster"]),
+        "food": random.randint(10, 100),
+        "medical_kits": random.randint(1, 5),
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "uuid": str(uuid.uuid4())  # Adding a UUID for uniqueness
     }
@@ -65,8 +63,8 @@ def simulate_emergency(drone_id):
     """
     drone = Drone(drone_id)
     drone.send_emergency_signal()
-    data = generate_sample_data(drone_id)
-    drone.transmit_data(data)
+    relief_supplies = generate_relief_supplies(drone_id)
+    drone.deliver_relief_supplies(relief_supplies)
 
 def main():
     """
@@ -84,5 +82,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
