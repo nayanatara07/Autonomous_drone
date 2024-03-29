@@ -32,12 +32,9 @@ To use this project:
 4. Utilize the `drone.py` module to deploy autonomous drones for disaster management operations.
 5. Run the `weather.py` script to collect weather conditions and assess the probability of disasters in different cities.
 
-## Contributors
-
-- [NayanaTara]
-- [Team_mates:Amruth,Lohit,Shiva]
-
 
 ## Acknowledgements
 
 We would like to express our gratitude to the open-source community for providing invaluable resources and tools that made this project possible. Additionally, we acknowledge the support and guidance of our mentors and advisors throughout the development process.
+
+- [NayanaTara]
